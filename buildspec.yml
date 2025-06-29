@@ -8,9 +8,7 @@ phases:
       - echo "=== INSTALL PHASE STARTED ===" | tee /dev/stdout
       - echo "Current directory: $(pwd)" | tee /dev/stdout
       - echo "Starting Docker..." | tee /dev/stdout
-      # Install Docker Client
       - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
-      - sleep 5
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
       - echo "Checking if Docker is running..." | tee /dev/stdout
       - docker info | tee /dev/stdout || echo "DOCKER FAILED TO START!" | tee /dev/stdout
