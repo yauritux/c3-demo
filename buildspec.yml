@@ -34,4 +34,7 @@ phases:
   post_build:
     commands:
       - echo "=== POST-BUILD PHASE STARTED ==="
-      - echo "Nothing on post build yet..."
+      - echo "Tagging docker image..."
+      - docker tag $IMAGE_REPO_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - echo "Pushing docker image to Amazon ECR..."
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
