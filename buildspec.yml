@@ -13,16 +13,19 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
       - echo "Checking if Docker is running..."
       - docker info || echo "DOCKER FAILED TO START!"
+
   pre_build:
     commands:
       - echo "=== PRE-BUILD PHASE STARTED ==="
       - echo "Current directory: $(pwd)"
       - echo "Node version: $(node -v)"
       - echo "NPM version: $(npm -v)"
+
   build:
     commands:
       - echo "=== BUILD PHASE STARTED ===" | tee /dev/stdout
       - echo "Nothing on build phase yet..."
+
   post_build:
     commands:
       - echo "=== POST-BUILD PHASE STARTED ===" | tee /dev/stdout
