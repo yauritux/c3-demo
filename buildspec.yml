@@ -18,6 +18,10 @@ phases:
       - echo "=== PRE-BUILD PHASE STARTED ==="
       - node -v
       - npm -v
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo "Installing dependencies..."
+      - npm install
 
   build:
     commands:
