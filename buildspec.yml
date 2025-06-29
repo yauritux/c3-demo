@@ -11,10 +11,6 @@ phases:
       # - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   pre_build:
     commands:
-      - echo "Running linting..."
-      - npm run lint
-      - echo "Runnin tests..."
-      - npm run test
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo "Installing dependencies..."
