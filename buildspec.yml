@@ -27,7 +27,3 @@ phases:
     commands:
       - echo "=== POST-BUILD PHASE STARTED ===" | tee /dev/stdout
       - echo "Nothing on post build yet..."
-
-# artifacts:
-#   files:
-#     - '**/*'

@@ -1,0 +1,46 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - set -x
+      - echo "=== INSTALL PHASE STARTED ==="
+      - echo "Current directory: $(pwd)"
+      - echo "Starting Docker..."
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+      - echo "Checking if Docker is running..."
+      - docker info || echo "DOCKER FAILED TO START!"
+  pre_build:
+    commands:
+      - echo "=== PRE-BUILD PHASE STARTED ==="
+      - echo "Current directory: $(pwd)"
+      - echo "Node version: $(node -v)"
+      - echo "NPM version: $(npm -v)"
+      # - "echo Looking for package.json... | tee /dev/stdout"
+      # - "test -f package.json && echo Found package.json || echo MISSING package.json | tee /dev/stdout"
+      # - "echo Logging in to Amazon ECR... | tee /dev/stdout"
+      # - "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com | tee /dev/stdout"
+      # - "echo Installing dependencies... | tee /dev/stdout"
+      # - "npm install | tee /dev/stdout"
+  build:
+    commands:
+      # - echo "=== BUILD PHASE STARTED ===" | tee /dev/stdout
+      # - echo "Building NestJS application..." | tee /dev/stdout
+      # - npm run build | tee /dev/stdout
+      # - echo "Build completed on $(date)" | tee /dev/stdout
+      # - echo "Building docker image..." | tee /dev/stdout
+      # - docker build -t $IMAGE_REPO_NAME .
+  post_build:
+    commands:
+      # - echo "=== POST-BUILD PHASE STARTED ===" | tee /dev/stdout
+      # - echo "Tagging Docker image..." | tee /dev/stdout
+      # - docker tag $IMAGE_REPO_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest | tee /dev/stdout
+      # - echo "Pushing Docker image to Amazon ECR..." | tee /dev/stdout
+      # - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest | tee /dev/stdout
+
+# artifacts:
+#   files:
+#     - '**/*'
