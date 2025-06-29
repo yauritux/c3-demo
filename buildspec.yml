@@ -20,11 +20,11 @@ phases:
       - "echo Node version: $(node -v) | tee /dev/stdout"
       - "echo NPM version: $(npm -v) | tee /dev/stdout"
       - "echo Looking for package.json... | tee /dev/stdout"
-      # - test -f package.json && echo "Found package.json" || echo "MISSING package.json" | tee /dev/stdout
-      # - echo "Logging in to Amazon ECR..." | tee /dev/stdout
-      # - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com | tee /dev/stdout
-      # - echo "Installing dependencies..." | tee /dev/stdout
-      # - npm install | tee /dev/stdout
+      - "test -f package.json && echo Found package.json || echo MISSING package.json | tee /dev/stdout"
+      - "echo Logging in to Amazon ECR... | tee /dev/stdout"
+      - "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com | tee /dev/stdout"
+      - "echo Installing dependencies... | tee /dev/stdout"
+      - "npm install | tee /dev/stdout"
   build:
     commands:
       # - echo "=== BUILD PHASE STARTED ===" | tee /dev/stdout
