@@ -7,7 +7,6 @@ phases:
     commands:
       - set -x
       - echo "=== INSTALL PHASE STARTED ==="
-      - echo "Current directory: $(pwd)"
       - echo "Starting Docker..."
       - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
@@ -17,16 +16,15 @@ phases:
   pre_build:
     commands:
       - echo "=== PRE-BUILD PHASE STARTED ==="
-      - echo "Current directory: $(pwd)"
-      - echo "Node version: $(node -v)"
-      - echo "NPM version: $(npm -v)"
+      - node -v
+      - npm -v
 
   build:
     commands:
-      - echo "=== BUILD PHASE STARTED ===" | tee /dev/stdout
+      - echo "=== BUILD PHASE STARTED ==="
       - echo "Nothing on build phase yet..."
 
   post_build:
     commands:
-      - echo "=== POST-BUILD PHASE STARTED ===" | tee /dev/stdout
+      - echo "=== POST-BUILD PHASE STARTED ==="
       - echo "Nothing on post build yet..."
