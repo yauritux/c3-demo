@@ -5,23 +5,33 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
-      - echo "Installing dependencies..."
-      - npm install
+      # Install Docker Client
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   pre_build:
     commands:
       - echo "Running linting..."
       - npm run lint
+      - echo "Runnin tests..."
+      - npm run test
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - echo "Installing dependencies..."
   build:
     commands:
       - echo "Building NestJS application..."
       - npm run build
+      - echo "Build completed on ${date}"
+      - echo "Building docker image..."
+      - docker build -t $IMAGE_REPO_NAME .
   post_build:
     commands:
-      - echo "Build completed on ${date}"
+      - echo "Tagging Docker image..."
+      - docker tag $IMAGE_REPO_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - echo "Pushing Docker image to Amazon ECR..."
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
 
 artifacts:
   files:
-    - dist/**
-    - package.json
-    - README.md
-  base-directory: .
+    - '**/*'
